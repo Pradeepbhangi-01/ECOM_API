@@ -1,0 +1,15 @@
+{
+  "name": "ecom_api",
+  "version": "1.0.0",
+  "description": "E-commerce website using RESTAPI's",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Pradeep bhangi",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
