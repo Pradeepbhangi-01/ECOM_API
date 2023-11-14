@@ -1,6 +1,8 @@
+import UserModel from "../user/user.model.js";
+
 export default class ProductModel {
   constructor(id, name, desc, price, imageUrl, category, sizes) {
-    this.ide = id;
+    this.id = id;
     this.name = name;
     this.desc = desc;
     this.price = price;
@@ -9,8 +11,76 @@ export default class ProductModel {
     this.sizes = sizes;
   }
 
-  static GetAll() {
+  static getAll() {
     return products;
+  }
+
+  static get(id) {
+    const product = products.find((i) => i.id == id);
+    return product;
+  }
+
+  static add(product) {
+    product.id = products.length + 1;
+    products.push(product);
+    return product;
+  }
+
+  static filter(minPrice, maxPrice, category) {
+    const result = products.filter((product) => {
+      return (
+        (!minPrice || product.price >= minPrice) &&
+        (!maxPrice || product.price <= maxPrice) &&
+        (!category || product.category == category)
+      );
+    });
+
+    return result;
+  }
+
+  static rateProduct(userID, productID, rating) {
+    //1.validate user
+
+    const user = UserModel.getAllUsers().find((u) => u.id == userID);
+
+    if (!user) {
+      return "User not found";
+    }
+
+    //2. validate the productid
+    const product = products.find((p) => p.id == productID);
+    if (!product) {
+      return "Product not found";
+    }
+
+    //3. check if the rating for the product is exist or not else add the product array
+    //3.a If rating is not there
+    if (!product.rating) {
+      product.ratings = [];
+      product.ratings.push({
+        userID: userID,
+        rating: rating,
+      });
+    } else {
+      //3.b --> check the user has already rated to the product or not
+      const existingRatingIndex = product.ratings.findIndex(
+        (r) => r.userID == userID
+      );
+
+      //If he has already rated the product means get that index and update the rating else add new rating
+      if (existingRatingIndex >= 0) {
+        product.ratings[existingRatingIndex] = {
+          userID: userID,
+          rating: rating,
+        };
+      } else {
+        // if the the user hasd not rated yet
+        product.ratings.push({
+          userID: userID,
+          rating: rating,
+        });
+      }
+    }
   }
 }
 

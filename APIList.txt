@@ -4,3 +4,8 @@ add a product
 get one product
 rate product
 Filter product
+
+
+Usercontroller
+signUp - (name,email,password,type of user)
+sign in - (email,password)
